@@ -2,8 +2,8 @@ import os
 
 # we'll need this to store payment results
 from pymongo import MongoClient
-client = MongoClient(os.environ['MONGO_HOST'], int(os.environ['MONGO_PORT']))
-db = client.payments # use payments DB
+client = MongoClient(os.environ['MONGO_URI'])
+db = client[os.environ['MONGO_DATABASE']]
 
 class LookupException(Exception):
     def __init__(self, message):

@@ -5,8 +5,8 @@ export PYTHONPATH="payments"
 
 export FLASK_SECRET="<your secret>"
 
-export MONGO_HOST="localhost"
-export MONGO_PORT="27017"
+export MONGO_URI="mongodb://localhost:27017"
+export MONGO_DATABASE="payments"
 
 export GOCARDLESS_USER="<your client key here>"
 export GOCARDLESS_PASS="<your secret here>"
