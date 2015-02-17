@@ -12,11 +12,14 @@ Not to be taken too seriously.
 Edit `config.sh`
 
 ## Set-Up
+```
 virtualenv env
 source env/bin/activate
 source config.sh
 pip install -r requirements.txt
-
+```
 
 ## Run
+```
 src/dev_server.py
+```
