@@ -4,14 +4,15 @@ Just testing some APIs for taking payments.
 Very messy code. 
 Not to be taken too seriously. 
 
-## Requires
+## Requirements
 * Python
 * MongoDB
 
-## Config
-Edit `config.sh`
+## Developer Configuration
+* Run `./create-config.sh`
+* Edit `config.sh` with your values
 
-## Set-Up
+## Developer Set-Up
 ```
 virtualenv env
 source env/bin/activate
@@ -19,7 +20,7 @@ source config.sh
 pip install -r requirements.txt
 ```
 
-## Run
+## Development Server
 ```
 src/dev_server.py
 ```
