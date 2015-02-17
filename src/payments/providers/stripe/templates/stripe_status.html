@@ -1,0 +1,22 @@
+{% extends "base-status.html" %}
+{% block status %}
+	<div class="transaction-banner--complete {% if not payment.provider_specific.success %}error{% endif %}">
+		<h1 class="transaction-banner__heading">Payment {% if payment.provider_specific.success %}succeeded{% else %}failed {% endif %}</h1>
+		<h2 class="transaction-banner__heading">Reference: <br>{{payment._id}}</h2>
+	</div>
+{% endblock %}
+
+
+{% block summary %}
+	{% if payment.provider_specific.success %}
+	<tr>
+	  <th>Card type</th>
+	  <td id="tax-reference" class="figure">{{payment.provider_specific.charge.card.brand}}</td>
+	</tr>
+	
+	<tr>
+	  <th>Card number</th>
+	  <td id="tax-reference" class="figure">ends {{payment.provider_specific.charge.card.last4}}</td>
+	</tr>
+	{% endif %}
+{% endblock %}

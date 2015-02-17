@@ -1,18 +1,19 @@
-from flask import session, render_template, url_for, redirect
+from flask import Blueprint, session, render_template, redirect
 
-from payments import app
 from payments.util import form
 from payments.providers.gocardless import model
 
-@app.route('/gocardless', methods=["GET"])
+gocardless_bp = Blueprint('gocardless', __name__, template_folder='templates')
+
+@gocardless_bp.route('/', methods=["GET"])
 def gocardless():
-    return redirect(url_for('gocardless_signin'))
+    return redirect(('.signin'))
 
-@app.route('/gocardless-signin', methods=["GET"])
+@gocardless_bp.route('/signin', methods=["GET"])
 def gocardless_signin():
-    return render_template('gocardless/signin.html')
+    return render_template('signin.html')
 
-@app.route('/gocardless-signin', methods=["POST"])
+@gocardless_bp.route('/gocardless-signin', methods=["POST"])
 def gocardless_signin_submit():
     # fudge - pre-known customer id
     session['customer_id'] = 'CU00002TDW4R84'
@@ -34,13 +35,13 @@ def gocardless_signin_submit():
     session['address-postcode'] = customer['postal_code']
     session['email'] = customer['email']
     
-    return redirect(url_for('gocardless_details'))
+    return redirect(('.gocardless_details'))
 
-@app.route('/gocardless-details', methods=["GET"])
+@gocardless_bp.route('/details', methods=["GET"])
 def gocardless_details():
-    return render_template('gocardless/details.html')
+    return render_template('details.html')
 
-@app.route('/gocardless-details', methods=["POST"])
+@gocardless_bp.route('/gocardless-details', methods=["POST"])
 def gocardless_details_submit():
     errors = []
     errors += form.to_session('sort-code')
@@ -56,21 +57,21 @@ def gocardless_details_submit():
     
     if len(errors) != 0:
         print errors
-        return render_template('gocardless/details.html', errors = errors)
+        return render_template('details.html', errors = errors)
     else:
-        return redirect(url_for('gocardless_confirm'))
+        return redirect(('.gocardless_confirm'))
 
-@app.route('/gocardless-confirm', methods=["GET"])
+@gocardless_bp.route('/confirm', methods=["GET"])
 def gocardless_confirm():
-    return render_template('dd-confirm.html')
+    return render_template('confirm.html')
 
-@app.route('/gocardless- confirm', methods=['POST'])
+@gocardless_bp.route('/confirm', methods=['POST'])
 def gocardless_confirm_submit():
     errors = []
     errors += form.to_session('email')
     
     if len(errors) != 0:
-        return render_template('gocardless/confirm.html', errors = errors)
+        return render_template('confirm.html', errors = errors)
     else:
         # is there an existing customer?
         if 'customer_id' in session:

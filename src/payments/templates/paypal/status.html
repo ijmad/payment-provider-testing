@@ -1,7 +1,0 @@
-<header class="page-header">
-	<div
-		class="transaction-banner--complete {% if ('execution' in payment.provider_specific) and (payment.provider_specific.execution.state != 'approved') %}error{% endif %}">
-		<h1 class="transaction-banner__heading">Payment {{payment.provider_specific.execution.state}}</h1>
-		<h2 class="transaction-banner__heading">Reference: <br>{{payment._id}}</h2>
-	</div>
-</header>

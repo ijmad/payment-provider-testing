@@ -4,13 +4,9 @@
 <article class="content__body">
   <br>
 
-  {% if payment['provider'] == 'stripe' %}
-     {% include 'stripe/status.html' %}
-  {% elif payment['provider'] == 'gocardless' %}
-     {% include 'gocardless/status.html' %}
-  {% elif payment['provider'] == 'paypal' %}
-     {% include 'paypal/status.html' %}
-  {% endif %}
+  <header class="page-header">
+  	{% block status %}{% endblock %}
+  </header>
 
   <table class="min summary">
     <tbody>
@@ -28,14 +24,8 @@
         <th>Account number</th>
         <td id="tax-reference" class="figure">{{payment.account}}</td>
       </tr>
-           
-      {% if payment['provider'] == 'stripe' %}
-      	{% include 'stripe/summary.html' %}
-	  {% elif payment['provider'] == 'gocardless' %}
-      	{% include 'gocardless/summary.html' %}
-	  {% elif payment['provider'] == 'paypal' %}
-      	{% include 'paypal/summary.html' %}
-	  {% endif %}
+      
+      {% block summary %}{% endblock %}
     </tbody>
   </table>
   

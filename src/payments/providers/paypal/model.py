@@ -60,8 +60,8 @@ def make_payment(ref, amount, account, what):
         }
       ],
       "redirect_urls" : {
-        "return_url" : url_for('paypal_return', _external = True),
-        "cancel_url" : url_for('paypal_cancel', _external = True)
+        "return_url" : url_for('.paypal_return', _external = True),
+        "cancel_url" : url_for('.paypal_cancel', _external = True)
       }
     }
     

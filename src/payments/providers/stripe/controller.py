@@ -1,19 +1,21 @@
-from flask import session, render_template, url_for, redirect
+from flask import Blueprint, session, render_template, url_for, redirect
 
-from payments import app
 from payments.providers.stripe import model
+from payments.persistence import lookup_ref
 from payments.util import form
+ 
+stripe_bp = Blueprint('stripe', __name__, template_folder='templates')
 
-@app.route('/stripe', methods=["GET"])
+@stripe_bp.route('/', methods=["GET"])
 def stripe():
-    return redirect(url_for('stripe_details'))
+    return redirect(url_for('.stripe_details'))
 
-@app.route('/stripe_details', methods=['GET'])
+@stripe_bp.route('/details', methods=['GET'])
 def stripe_details():
-    return render_template('stripe/details.html')
+    return render_template('stripe_details.html')
 
-@app.route('/stripe_details', methods=['POST'])
-def card_details_submit():
+@stripe_bp.route('/details', methods=['POST'])
+def stripe_details_submit():
     errors = []
     errors += form.to_session('card-type')
     errors += form.to_session('card-number')
@@ -28,21 +30,21 @@ def card_details_submit():
     errors += form.to_session('card-address-postcode')
     
     if len(errors) != 0:
-        return render_template('stripe/details.html', errors = errors)
+        return render_template('stripe_details.html', errors = errors)
     else:
-        return redirect(url_for('stripe_confirm'))
+        return redirect(url_for('.stripe_confirm'))
 
-@app.route('/stripe_confirm', methods=['GET'])
+@stripe_bp.route('/confirm', methods=['GET'])
 def stripe_confirm():
-    return render_template('stripe/confirm.html')
+    return render_template('stripe_confirm.html')
 
-@app.route('/stripe_confirm', methods=['POST'])
+@stripe_bp.route('/confirm', methods=['POST'])
 def stripe_confirm_submit():
     errors = []
     errors += form.to_session('email')
     
     if len(errors) != 0:
-        return render_template('stripe/confirm.html', errors = errors)
+        return render_template('stripe_confirm.html', errors = errors)
     else:
         ref = session['ref']
         
@@ -70,3 +72,7 @@ def stripe_confirm_submit():
         
         # permanent status page
         return redirect(url_for('status', ref = ref))
+    
+@stripe_bp.route('/status/<ref>', methods=['GET'])
+def stripe_status(ref):
+    return render_template('stripe_status.html', payment = lookup_ref(ref))

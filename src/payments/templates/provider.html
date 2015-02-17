@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<article class="content__body">
+  <header>
+	<h1 class="heading-large">Choose how you'd like to pay</h1>
+  </header>
+  
+  <table class="min summary">
+    <tbody>
+      <tr>
+        <th class="grid-1-2">Paying</th>
+        <td class="grid-1-2">{{session.what}}</td>
+      </tr>
+
+      <tr>
+        <th>Account number</th>
+        <td id="tax-reference" class="figure">{{session.account}}</td>
+      </tr>
+      
+      <tr>
+        <th>Amount</th>
+        <td class="figure">£{{session.amount}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <form method="POST">
+    <fieldset class="form-group  {% if 'provider' in errors %} error-overview {% endif %}">
+	  <label for="provider-stripe" class="block-label card-label ">
+	    <input type="radio" name="provider" value="stripe" id="provider-stripe" required> Card payment
+	    <p class="form-hint">using Stripe</p>
+	  </label>
+    
+	  <label for="provider-gocardless" class="block-label card-label ">
+	    <input type="radio" name="provider" value="gocardless" id="provider-gocardless" required> Direct Debit
+	    <p class="form-hint">using GoCardless</p>
+	  </label>
+	  
+	  <label for="provider-paypal" class="block-label card-label ">
+	    <input type="radio" name="provider" value="paypal" id="provider-paypal" required> PayPal
+	  </label>
+    </fieldset>
+	
+    <p><input type="submit" id="next" class="button" value="Next"></p>
+  </form>
+</article>
+{% endblock %}
