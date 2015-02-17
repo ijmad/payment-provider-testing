@@ -1,10 +1,9 @@
 import json, requests, os
 from flask import url_for
 from requests.auth import HTTPBasicAuth
-from payments.persistence import client
+from payments.persistence import payments_db
 
 auth = HTTPBasicAuth(os.environ['PAYPAL_USER'], os.environ['PAYPAL_PASS'])
-db = client.payments
 
 class PayPalError(Exception):
     def __init__(self, message):
@@ -78,7 +77,7 @@ def make_payment(ref, amount, account, what):
     }
     
     # store charge 
-    db.payments.insert(details)
+    payments_db.insert(details)
     
     # get the redirect url
     for link in result['links']:
@@ -91,7 +90,7 @@ def execute(url, payer_id):
     return make_request(url, { "payer_id" : payer_id })
 
 def success(payment_id, payer_id):
-    cursor = db.payments.find({ 'provider_specific.result.id' : payment_id })
+    cursor = payments_db.find({ 'provider_specific.result.id' : payment_id })
     
     if cursor.count() == 1:
         payment = cursor.next()
@@ -100,17 +99,17 @@ def success(payment_id, payer_id):
         for link in payment['provider_specific']['result']['links']:
             if str(link['rel']) == 'execute':
                 execution = execute(str(link['href']), payer_id)
-                db.payments.update(payment, { '$set': { 'provider_specific.execution' : execution } })
+                payments_db.update(payment, { '$set': { 'provider_specific.execution' : execution } })
                 return payment['_id']
         
     raise PayPalError('Payment not found')
 
 def cancelled(payment_id):
-    cursor = db.payments.find({ 'result.id' : payment_id })
+    cursor = payments_db.find({ 'result.id' : payment_id })
     
     if cursor.count() == 1:
         payment = cursor.next()
-        db.payments.update(payment, { '$set': { 'message' : 'You cancelled the payment' } })
+        payments_db.update(payment, { '$set': { 'message' : 'You cancelled the payment' } })
         return payment['_id']
     
     raise PayPalError('Payment not found')

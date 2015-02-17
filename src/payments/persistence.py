@@ -2,6 +2,7 @@ import os, pymongo
 
 conn = pymongo.Connection(os.environ['MONGO_URI'])
 db = conn[os.environ['MONGO_DATABASE']]
+payments_db = db['payments']
 
 class LookupException(Exception):
     def __init__(self, message):
@@ -11,7 +12,7 @@ class LookupException(Exception):
         return self.message
 
 def lookup_ref(ref):
-    cursor = db.payments.find({'_id' : ref})
+    cursor = payments_db.find({'_id' : ref})
     if cursor.count() == 1:
         return cursor.next()
     else:

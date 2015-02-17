@@ -1,7 +1,6 @@
 import stripe, os
-from payments.persistence import client
+from payments.persistence import payments_db
 
-db = client.payments
 stripe.api_key = os.environ['STRIPE_KEY']
 stripe.api_version = '2015-01-26'
 
@@ -45,7 +44,7 @@ def make_payment(ref, account, amount, what, card_number, exp_month, exp_year, c
         }
         
         # store charge 
-        db.payments.insert(details)
+        payments_db.insert(details)
         return charge
     except stripe.CardError, e:
         details = {
@@ -61,5 +60,5 @@ def make_payment(ref, account, amount, what, card_number, exp_month, exp_year, c
         }
         
         # store charge 
-        db.payments.insert(details)
+        payments_db.insert(details)
 
