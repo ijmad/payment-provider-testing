@@ -12,9 +12,9 @@ def index():
 
 @app.route('/start', methods=['GET'])
 def start():
-    def rand4():
-        return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(4))
-    session['ref'] = '%s-%s-%s-%s' % (rand4(), rand4(), rand4(), rand4()) 
+    def rand(length):
+        return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(length))
+    session['ref'] = '%s-%s' % (rand(4), rand(4)) 
     return render_template('start.html')
 
 @app.route('/start', methods=['POST'])

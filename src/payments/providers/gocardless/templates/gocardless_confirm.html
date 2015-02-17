@@ -30,16 +30,24 @@
     </tbody>
   </table>
   
+ 
+  {% if mandate %}
+ 	<p class="important-notice">You have used this account before.<br>We can take payment on {{charge_date}}.</p>
+  {% else %}
+ 	<p class="important-notice">You must read and confirm the terms in the e-mail we send you for your payment to go ahead.</p>
+    <p class="important-notice">We can take payment 10 days after you click to agree, some time after {{charge_date}}.</p>
+  {% endif %}
+  
+  <br>
+  
   <form method="POST">
     <label for="email" class="form-label">
       <legend class="form-label-bold">E-mail address</legend>
 	  <input type="text" class="form-control input-medium" name="email" id="email" value="{{session['email']}}" required>
     </label>
-  
-  	<p class="important-notice" style="height: 3em; line-height: 2em;">You must read and confirm the terms in the e-mail we send you.</p>
   	
     <p><input type="submit" id="confirm" class="button" value="Confirm"></p>    
   </form>
   
-  {% include 'dd.html' %}
+  {% include 'gocardless_dd.html' %}
 {% endblock %}

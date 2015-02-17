@@ -1,0 +1,43 @@
+{% extends "base-status.html" %}
+{% block status %}
+	<div class="transaction-banner--complete {% if false %}error{% endif %}" style="{% if payment.provider_specific.payment.status != 'completed' %} background-color: orange;{% endif%} ">
+		<h1 class="transaction-banner__heading">
+			{% if payment.provider_specific.mandate %}
+				{% if payment.provider_specific.payment %}
+					Payment {{payment.provider_specific.payment.status}}
+				{% else %}
+					Mandate {{payment.provider_specific.mandate.status}}
+				{% endif %}				
+			{% else %}
+				Payment not yet submitted.<br>
+				Please check your e-mail.
+			{% endif %}
+		</h1>
+		<h2 class="transaction-banner__heading">Reference: <br>{{payment._id}}</h2>
+	</div>
+{% endblock %}
+
+
+{% block summary %}
+	{% if payment.provider_specific.account %}
+	<tr>
+	  <th>Bank name</th>
+	  <td id="tax-reference" class="figure">{{payment.provider_specific.account.bank_name}}</td>
+	</tr>
+	
+	<tr>
+	  <th>Account holder</th>
+	  <td id="tax-reference" class="figure">{{payment.provider_specific.account.account_holder_name}}</td>
+	</tr>
+	
+	<tr>
+	  <th>Bank account</th>
+	  <td id="tax-reference" class="figure">******{{payment.provider_specific.account.account_number_ending}}</td>
+	</tr>
+	{% endif %}
+	
+	<tr>
+	  <th>E-mail address</th>
+	  <td id="tax-reference" class="figure">{{payment.provider_specific.email}}</td>
+	</tr>
+{% endblock %}
