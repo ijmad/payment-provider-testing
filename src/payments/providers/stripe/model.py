@@ -1,15 +1,9 @@
-import stripe
+import stripe, os
 from payments.persistence import client
-from payments.config import stripe_key
 
 db = client.payments
-
-
-
-stripe.api_key = stripe_key
+stripe.api_key = os.environ['STRIPE_KEY']
 stripe.api_version = '2015-01-26'
-
-
 
 def make_payment(ref, account, amount, what, card_number, exp_month, exp_year, cvc, name, address1, address2, city, county, postcode, email):
     try:
@@ -39,14 +33,15 @@ def make_payment(ref, account, amount, what, card_number, exp_month, exp_year, c
         
         details = {
             '_id' : ref,
-            'success' : True,
-            'method' : 'card',
             'provider' : 'stripe',
+            'what' : what,
             'account' : account,
             'amount' : amount,
-            'what' : what,
-            'result' : charge,
-            'email' : email
+            'provider_specific' : {
+                'success' : True,
+                'email' : email,
+                'charge' : charge
+            }
         }
         
         # store charge 
@@ -55,13 +50,14 @@ def make_payment(ref, account, amount, what, card_number, exp_month, exp_year, c
     except stripe.CardError, e:
         details = {
             '_id' : ref,
-            'success' : False,
-            'method' : 'card',
             'provider' : 'stripe',
+            'what' : what,
             'account' : account,
             'amount' : amount,
-            'what' : what,
-            'message' : e.message
+            'provider_specific' : {
+                'success' : False,
+                'error' : e.message
+            }
         }
         
         # store charge 

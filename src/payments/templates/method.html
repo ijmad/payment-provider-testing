@@ -26,14 +26,14 @@
 
   <form method="POST">
     <fieldset class="form-group  {% if 'method' in errors %} error-overview {% endif %}">
-	  <label for="method-dd" class="block-label card-label ">
-	    <input type="radio" name="method" value="dd" id="method-dd" required> Direct Debit
-	    <p class="form-hint">using GoCardless</p>
-	  </label>
-		
-	  <label for="method-card" class="block-label card-label ">
-	    <input type="radio" name="method" value="card" id="method-card" required> Card payment
+	  <label for="method-stripe" class="block-label card-label ">
+	    <input type="radio" name="method" value="stripe" id="method-stripe" required> Card payment
 	    <p class="form-hint">using Stripe</p>
+	  </label>
+    
+	  <label for="method-gocardless" class="block-label card-label ">
+	    <input type="radio" name="method" value="gocardless" id="method-gocardless" required> Direct Debit
+	    <p class="form-hint">using GoCardless</p>
 	  </label>
 	  
 <!-- 	  <label for="method-card" class="block-label card-label ">

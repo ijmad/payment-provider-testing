@@ -4,18 +4,13 @@
 <article class="content__body">
   <br>
 
-  <header class="page-header">
-	<div class="transaction-banner--complete {% if not payment.success %}error{% endif %}">
-	    <h1 class="transaction-banner__heading">
-		    {% if payment.success %}
-		      Payment succeeded
-		    {% else %}
-		      Payment failed
-		    {% endif %}
-	    </h1>
-	    <h2 class="transaction-banner__heading">Reference: <br>{{payment._id}}</h2>
-	</div>
-  </header>
+  {% if payment['provider'] == 'stripe' %}
+     {% include 'stripe/status.html' %}
+  {% elif payment['provider'] == 'gocardless' %}
+     {% include 'gocardless/status.html' %}
+  {% elif payment['provider'] == 'paypal' %}
+     {% include 'paypal/status.html' %}
+  {% endif %}
 
   <table class="min summary">
     <tbody>
@@ -33,19 +28,13 @@
         <th>Account number</th>
         <td id="tax-reference" class="figure">{{payment.account}}</td>
       </tr>
-      
-      {% if payment.success %}
-	      {% if payment['method'] == 'card' %}
-	      	{% include 'status-card.html' %}
-		  {% endif %}
-		  {% if payment['method'] == 'paypal' %}
-	      	{% include 'status-paypal.html' %}
-		  {% endif %}
-	  {% else %}
-		  <tr>
-	        <th>Problem</th>
-	        <td id="tax-reference" class="figure">{{payment.message}}</td>
-	      </tr>
+           
+      {% if payment['provider'] == 'stripe' %}
+      	{% include 'stripe/summary.html' %}
+	  {% elif payment['provider'] == 'gocardless' %}
+      	{% include 'gocardless/summary.html' %}
+	  {% elif payment['provider'] == 'paypal' %}
+      	{% include 'paypal/summary.html' %}
 	  {% endif %}
     </tbody>
   </table>
@@ -58,11 +47,4 @@
   </div>
 	
   <p><a href="" rel="nofollow" target="_blank">Download as PDF</a></p>
-
-  {% if not payment.success %}
-	  <form method="GET" action="{{url_for('index')}}">
-	    <p><input type="submit" id="confirm" class="button" value="Try Again"></p>
-	  </form>
-  {% endif %}
-
 {% endblock %}

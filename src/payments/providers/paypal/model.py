@@ -1,20 +1,17 @@
-import json, requests
+import json, requests, os
+from flask import url_for
 from requests.auth import HTTPBasicAuth
 from payments.persistence import client
-from payments.config import paypal_user, paypal_pass
 
+auth = HTTPBasicAuth(os.environ['PAYPAL_USER'], os.environ['PAYPAL_PASS'])
 db = client.payments
 
-
 class PayPalError(Exception):
-    def __init__(self, status_code, json):
-        self.status_code = status_code
-        self.json = json
+    def __init__(self, message):
+        self.message = message
         
     def __str__(self):
-        return repr(self.json)
-
-
+        return repr(self.message)
 
 def make_request(url, payload):
     headers = {
@@ -24,11 +21,9 @@ def make_request(url, payload):
     
     r = requests.post(url, data=json.dumps(payload), headers=headers)
     if r.status_code < 200 or r.status_code >= 300:
-        raise PayPalError(r.json()['message'])
+        raise PayPalError(r.json())
     else:
         return r.json()
-
-
 
 def get_token():
     url = 'https://api.sandbox.paypal.com/v1/oauth2/token?'
@@ -41,16 +36,13 @@ def get_token():
       url,
       headers=headers,
       data = {'grant_type' : 'client_credentials'},
-      auth=HTTPBasicAuth(paypal_user, paypal_pass)
+      auth = auth
     )
     
     if r.status_code < 200 or r.status_code >= 300:
-        json = r.json()
-        raise PayPalError(str(json['error'] + ': ' + json['error_description'] ))
+        raise PayPalError(r.json())
     else:
         return r.json()['access_token']
-
-
 
 def make_payment(ref, amount, account, what):
     payload = {
@@ -68,21 +60,21 @@ def make_payment(ref, amount, account, what):
         }
       ],
       "redirect_urls" : {
-        "return_url" : "http://localhost:5000/landing/paypal/return",
-        "cancel_url" : "http://localhost:5000/landing/paypal/cancel"
+        "return_url" : url_for('paypal_return', _external = True),
+        "cancel_url" : url_for('paypal_cancel', _external = True)
       }
     }
     
     result = make_request('https://api.sandbox.paypal.com/v1/payments/payment', payload)
     details = {
         '_id' : ref,
-        'success' : False, # so far...
-        'method' : 'paypal',
         'provider' : 'paypal',
+        'what' : what,
         'account' : account,
         'amount' : amount,
-        'what' : what,
-        'result' : result
+        'provider_specific' : {
+            'result' : result
+        }
     }
     
     # store charge 
@@ -95,29 +87,23 @@ def make_payment(ref, amount, account, what):
         
     return None
 
-
-
 def execute(url, payer_id):
     return make_request(url, { "payer_id" : payer_id })
 
-
-
 def success(payment_id, payer_id):
-    cursor = db.payments.find({ 'result.id' : payment_id })
+    cursor = db.payments.find({ 'provider_specific.result.id' : payment_id })
     
     if cursor.count() == 1:
         payment = cursor.next()
         
         # get the execute url
-        for link in payment['result']['links']:
+        for link in payment['provider_specific']['result']['links']:
             if str(link['rel']) == 'execute':
-                info = execute(str(link['href']), payer_id)
-                db.payments.update(payment, { '$set': { 'success' : True, 'info' : info } })
+                execution = execute(str(link['href']), payer_id)
+                db.payments.update(payment, { '$set': { 'provider_specific.execution' : execution } })
                 return payment['_id']
         
     raise PayPalError('Payment not found')
-
-
 
 def cancelled(payment_id):
     cursor = db.payments.find({ 'result.id' : payment_id })

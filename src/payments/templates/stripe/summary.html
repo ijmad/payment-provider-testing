@@ -1,0 +1,11 @@
+{% if payment.provider_specific.success %}
+<tr>
+  <th>Card type</th>
+  <td id="tax-reference" class="figure">{{payment.provider_specific.charge.card.brand}}</td>
+</tr>
+
+<tr>
+  <th>Card number</th>
+  <td id="tax-reference" class="figure">ends {{payment.provider_specific.charge.card.last4}}</td>
+</tr>
+{% endif %}

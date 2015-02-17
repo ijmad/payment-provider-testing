@@ -1,11 +1,8 @@
-import json, requests
+import json, requests, os
 from requests.auth import HTTPBasicAuth
-from payments.config import gocardless_user, gocardless_pass
 
-
-auth = HTTPBasicAuth(gocardless_user, gocardless_pass)
+auth = HTTPBasicAuth(os.environ['GOCARDLESS_USER'], os.environ['GOCARDLESS_PASS'])
 headers = { 'content-type': 'application/json', 'GoCardless-Version': '2014-11-03' }
-
 
 class GoCardlessError(Exception):
     def __init__(self, status_code, json):

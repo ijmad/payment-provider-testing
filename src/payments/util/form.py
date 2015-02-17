@@ -2,7 +2,7 @@ from flask import session, request
 
 
 
-def handle_form_var(name, required = True):
+def to_session(name, required = True):
     try:
         session[name] = request.form[name]
         if session[name] == '' and required:
@@ -17,7 +17,7 @@ def handle_form_var(name, required = True):
 
 
 
-def handle_form_var_boolean(name):
+def to_session_bool(name):
     try:
         session[name] = request.form[name] == 'true'
     except KeyError:

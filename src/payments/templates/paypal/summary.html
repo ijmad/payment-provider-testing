@@ -1,0 +1,11 @@
+<tr>
+  <th>Payment method</th>
+  <td id="tax-reference" class="figure">PayPal</td>
+</tr>
+
+{% if 'execution' in payment.provider_specific %}
+<tr>
+  <th>Account used</th>
+  <td id="tax-reference" class="figure">{{payment.provider_specific.execution.payer.payer_info.email}}</td>
+</tr>
+{% endif %}

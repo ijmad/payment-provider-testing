@@ -12,3 +12,6 @@ with app.app_context():
     app.session_interface = MongoDBSessionInterface(app, mongo.db, 'sessions')
 
 from payments.controller import *
+from payments.providers.stripe.controller import *
+from payments.providers.gocardless.controller import *
+from payments.providers.paypal.controller import *
