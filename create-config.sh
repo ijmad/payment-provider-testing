@@ -3,6 +3,8 @@
 cat > config.sh << EOF
 export PYTHONPATH="payments"
 
+export FLASK_SECRET="<your secret>"
+
 export MONGO_HOST="localhost"
 export MONGO_PORT="27017"
 
