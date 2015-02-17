@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block content %}
+<article class="content__body">
+  <header>
+	<h1 class="heading-large">About your card</h1>
+  </header>
+
+  <table class="min summary">
+    <tbody>
+      <tr>
+        <th class="grid-1-2">Paying</th>
+        <td class="grid-1-2">{{session.what}}</td>
+      </tr>
+
+      <tr>
+        <th>Account number</th>
+        <td id="tax-reference" class="figure">{{session.account}}</td>
+      </tr>
+      
+      <tr>
+        <th>Amount</th>
+        <td class="figure">£{{session.amount}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <form method="POST">
+	<legend class="form-label-bold">Type of card</legend>
+	  
+    <fieldset class="form-group {% if 'card-type' in errors %} error-overview {% endif %}">
+	  <label for="card-type-amex" class="block-label card-label ">
+	    <input type="radio" name="card-type" value="amex" id="card-type-amex"
+	      {% if session['card-type'] == 'amex' %}checked{% endif %}> American Express
+	  </label>
+		
+	  <label for="card-type-mastercard" class="block-label card-label ">
+	    <input type="radio" name="card-type" value="mastercard" id="card-type-mastercard"
+	      {% if session['card-type'] == 'mastercard' %}checked{% endif %}> Mastercard
+	  </label>
+	  
+	  <label for="card-type-visa" class="block-label card-label ">
+	    <input type="radio" name="card-type" value="visa" id="card-type-visa"
+	      {% if session['card-type'] == 'visa' %}checked{% endif %}> Visa 
+	  </label>
+	  
+	  <label for="card-type-visa-debit" class="block-label card-label ">
+	    <input type="radio" name="card-type" value="visa-debit" id="card-type-visa-debit"
+	      {% if session['card-type'] == 'visa-debit' %}checked{% endif %}> Visa Debit
+	  </label>
+    </fieldset>
+	  
+	<br>
+	
+	<fieldset class="form-group {% if 'card-number' in errors %} error-overview {% endif %}">
+	    <label for="card-number" class="form-label">
+	      <legend class="form-label-bold">Card number</legend>
+		  <p class="form-hint">The long number from the front of the card</p>
+	      <input type="text" class="form-control input-medium" name="card-number" id="card-number"
+	        value="{{session['card-number']}}" maxlength="19" pattern="[0-9]{16,}" required>
+	    </label>
+	</fieldset>
+	
+	<br>
+	
+	<fieldset class="form-group {% if 'card-name' in errors %} error-overview {% endif %}">
+	    <label for="card-name" class="form-label">
+	        <legend class="form-label-bold">Name on card</legend>
+			<p class="form-hint">Exactly as shown on the front of the card. Capital letters don't matter.</p>
+	        <input type="text" class="form-control input-medium" name="card-name" id="card-name"
+	          value="{{session['card-name']}}" required>
+	    </label>
+	</fieldset>
+	
+	<br>
+	
+	<fieldset class="form-group {% if ('card-expiry-month' in errors) or ('card-expiry-year' in errors) %} error-overview {% endif %}">
+	    <label for="card-expiry-month" class="form-label">
+	      <legend class="form-label-bold">Expiry date</legend>	
+		  <p class="form-hint">Month and year, for example 03 15</p> 		
+	      <input type="text" class="form-control input-medium" name="card-expiry-month" id="card-expiry-month"
+	        value="{{session['card-expiry-month']}}" maxlength="2" pattern="[0-9]{2}" style="width: 2em; " required> 
+	      <input type="text" class="form-control input-medium" name="card-expiry-year" id="card-expiry-year"
+	        value="{{session['card-expiry-year']}}" maxlength="4" pattern="[0-9]{4}" style="width: 4em; " required>
+	    </label>
+	</fieldset>
+	
+	<br>
+	
+	<fieldset class="form-group {% if 'card-csc' in errors %} error-overview {% endif %}">
+	    <label for="card-csc" class="form-label">
+	      <legend class="form-label-bold">Security code</legend>
+	      <p class="form-hint">The last three digits of the number on the back of your card</p> 
+	      <input type="text" class="form-control input-medium" name="card-csc" id="card-csc"
+	        value="{{session['card-csc']}}" maxlength="3" pattern="[0-9]{3}" style="width: 3em; " required>
+	    </label>
+	</fieldset>
+	
+	<br>
+	  
+    <fieldset class="form-group {% if ('card-address-street-1' in errors) or ('card-address-street-2' in errors) or 
+        ('card-address-city' in errors) or ('card-address-county' in errors) or ('card-address-postcode' in errors) %} error-overview {% endif %}">
+        
+		<label for="card-address-street-1" class="form-label">
+			<legend class="form-label-bold">Card address</legend>
+			<p class="form-hint">This is where your card bill is sent</p> 
+		</label>
+
+        <label for="card-address-street-1" class="form-label">
+			<legend class="form-label">Building and street</legend>
+            <input type="text" class="form-control input-medium" name="card-address-street-1" id="card-address-street-1"
+              value="{{session['card-address-street-1']}}" required>
+            <input type="text" class="form-control input-medium" name="card-address-street-2" id="card-address-street-2"
+              value="{{session['card-address-street-2']}}">
+        </label>
+	
+        <label for="card-address-city" class="form-label">
+			<legend class="form-label">Town or city</legend>
+            <input type="text" class="form-control input-medium" name="card-address-city" id="card-address-city"
+              value="{{session['card-address-city']}}" required>
+        </label>
+		
+        <label for="card-address-county" class="form-label">
+			<legend class="form-label">County (optional)</legend>
+            <input type="text" class="form-control input-medium" name="card-address-county" id="card-address-county"
+              value="{{session['card-address-county']}}">
+        </label>
+		
+        <label for="card-address-postcode" class="form-label">
+			<legend class="form-label">Postcode</legend>
+            <input type="text" class="form-control input-medium" name="card-address-postcode" id="card-address-postcode"
+              value="{{session['card-address-postcode']}}" style="width: 10em; " maxlength="9" required>
+        </label>
+    </fieldset>
+	
+    <p><input type="submit" id="next" class="button" value="Next"></p>
+  </form>
+</article>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block content %}
+<article class="content__body">
+  <header>
+	<h1 class="heading-large">Pay using direct debit</h1>
+  </header>
+
+  <table class="min summary">
+    <tbody>
+      <tr>
+        <th class="grid-1-2">Paying</th>
+        <td class="grid-1-2">{{session.what}}</td>
+      </tr>
+
+      <tr>
+        <th>Account number</th>
+        <td id="tax-reference" class="figure">{{session.account}}</td>
+      </tr>
+      
+      <tr>
+        <th>Amount</th>
+        <td class="figure">£{{session.amount}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <form method="POST">
+	<p class="form-hint">We will use direct debit to take a one-off payment from your bank account.
+	  Please tell us which account you'd like to use.</p>
+	
+	<br>
+	
+	<fieldset class="form-group {% if 'sort-code' in errors %} error-overview {% endif %}">
+	    <label for="sort-code" class="form-label">
+	      <legend class="form-label-bold">Sort code</legend>
+	      <input type="text" class="form-control input-medium" name="sort-code" id="sort-code" value="{{session['sort-code']}}" maxlength="7" pattern="[0-9*]*" required>
+	    </label>
+	</fieldset>
+    
+	<br>
+	
+	<fieldset class="form-group {% if 'account-number' in errors %} error-overview {% endif %}">
+	    <label for="account-number" class="form-label">
+	      <legend class="form-label-bold">Account number</legend>
+	      <input type="text" class="form-control input-medium" name="account-number" id="account-number" value="{{session['account-number']}}" maxlength="8" pattern="[0-9*]*" required>
+	    </label>
+	</fieldset>
+	
+	<br>
+	
+	<fieldset class="form-group {% if 'first-name' in errors or 'last-name' in errors %} error-overview {% endif %}">
+	    <label for="first-name" class="form-label">
+	      <legend class="form-label-bold">Name on the account</legend>
+	      
+	      <p class="form-hint">First</p>
+	      <input type="text" class="form-control input-medium" name="first-name" id="first-name" value="{{session['first-name']}}" required>
+	      
+	      
+	      <p class="form-hint">Last</p>
+	      <input type="text" class="form-control input-medium" name="last-name" id="last-name" value="{{session['last-name']}}" required>
+	    </label>
+	</fieldset>
+	
+	<br>
+	  
+    <fieldset class="form-group {% if 'address-street-1' in errors or 'address-street-2' in errors or 'address-city' in errors or 'address-county' in errors or 'address-postcode' in errors %} error-overview {% endif %}">
+		<label for="address-street-1" class="form-label">
+			<legend class="form-label-bold">Your address</legend>
+			<p class="form-hint">This is where your statements are sent</p> 
+		</label>
+
+        <label for="address-street-1" class="form-label">
+			<legend class="form-label">Building and street</legend>
+            <input type="text" class="form-control input-medium" name="address-street-1" id="address-street-1" value="{{session['address-street-1']}}" required>
+            <input type="text" class="form-control input-medium" name="address-street-2" id="address-street-2" value="{{session['address-street-2']}}" required>
+        </label>
+	
+        <label for="address-city" class="form-label">
+			<legend class="form-label">Town or city</legend>
+            <input type="text" class="form-control input-medium" name="address-city" id="address-city" value="{{session['address-city']}}" required>
+        </label>
+		
+        <label for="address-county" class="form-label">
+			<legend class="form-label">County (optional)</legend>
+            <input type="text" class="form-control input-medium" name="address-county" id="address-county" value="{{session['address-county']}}" required>
+        </label>
+		
+        <label for="address-postcode" class="form-label">
+			<legend class="form-label">Postcode</legend>
+            <input type="text" class="form-control input-medium" name="address-postcode" id="address-postcode" value="{{session['address-postcode']}}" style="width: 10em; " maxlength="9" required>
+        </label>
+    </fieldset>
+	
+    <p><input type="submit" id="next" class="button" value="Next"></p>
+  </form>
+  
+  {% include 'dd.html' %}
+</article>
+{% endblock %}

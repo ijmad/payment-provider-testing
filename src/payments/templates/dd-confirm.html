@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+
+<article class="content__body">
+  <header>
+	<h1 class="heading-large">Confirm your payment</h1>
+  </header>
+
+  <table class="min summary">
+    <tbody>
+      <tr>
+        <th class="grid-1-2">Paying</th>
+        <td class="grid-1-2">{{session.what}}</td>
+      </tr>
+
+      <tr>
+        <th>Amount</th>
+        <td class="figure">£{{session.amount}}</td>
+      </tr>
+
+      <tr>
+        <th>Account number</th>
+        <td id="tax-reference" class="figure">{{session.account}}</td>
+      </tr>
+      
+      <tr>
+        <th>Payment type</th>
+        <td id="tax-reference" class="figure">Direct Debit {{session['payment-type']}} from {{session['account-number']}}</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <form method="POST">
+    <label for="email" class="form-label">
+      <legend class="form-label-bold">E-mail address</legend>
+	  <input type="text" class="form-control input-medium" name="email" id="email" value="{{session['email']}}" required>
+    </label>
+  
+  	<p class="important-notice" style="height: 3em; line-height: 2em;">You must read and confirm the terms in the e-mail we send you.</p>
+  	
+    <p><input type="submit" id="confirm" class="button" value="Confirm"></p>    
+  </form>
+  
+  {% include 'dd.html' %}
+{% endblock %}

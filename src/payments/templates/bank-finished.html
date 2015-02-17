@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+
+<article class="content__body">
+  <br>
+
+  <header class="page-header">
+	<div class="transaction-banner--complete">
+	    <h1 class="transaction-banner__heading">Payment in progress</h1>
+	    <h2 class="transaction-banner__heading">Reference: <br>KZQ4-38AR-6SUB-PT1C</h2>
+	</div>
+  </header>
+
+  <table class="min summary">
+    <tbody>
+      <tr>
+        <th class="grid-1-2">Paying</th>
+        <td class="grid-1-2">{{session.what}}</td>
+      </tr>
+
+      <tr>
+        <th>Amount</th>
+        <td class="figure">£{{session.amount}}</td>
+      </tr>
+
+      <tr>
+        <th>Account number</th>
+        <td id="tax-reference" class="figure">{{session.account}}</td>
+      </tr>
+      
+      <tr>
+        <th>Payment type</th>
+        <td id="tax-reference" class="figure">{{session['payment-type']}} **** **** **** **** 4344</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <p>You can bookmark this page and check back, or write down the
+    reference number and use our <a href="#">online checker</a>.</p>
+  
+  <div class="print-link extra-top-margin">
+	<p><img src="/static/print-icon.png" align="center"> &nbsp;  <a href="#" rel="nofollow" target="_blank">Print</a></p>
+  </div>
+	
+  <p><a href="" rel="nofollow" target="_blank">Download as PDF</a></p>
+
+{% endblock %}

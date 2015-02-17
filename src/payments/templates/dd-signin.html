@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+
+<article class="content__body">
+  <header>
+	<h1 class="heading-large">Sign in</h1>
+  </header>
+
+  <table class="min summary">
+    <tbody>
+      <tr>
+        <th class="grid-1-2">Paying</th>
+        <td class="grid-1-2">{{session.what}}</td>
+      </tr>
+
+      <tr>
+        <th>Amount</th>
+        <td class="figure">£{{session.amount}}</td>
+      </tr>
+
+      <tr>
+        <th>Account number</th>
+        <td id="tax-reference" class="figure">{{session.account}}</td>
+      </tr>
+      
+      <tr>
+        <th>Payment method</th>
+        <td id="tax-reference" class="figure">Direct Debit</td>
+      </tr>
+  </table>
+  
+  <form method="POST">
+    <label for="email" class="form-label">
+	  <p>If you have paid by Direct Debit before, you can 
+	   sign in. This will speed up taking your payment if we've already
+	   taken money from your bank account.</p>
+	
+  
+    <p><input type="submit" id="signin" class="button" value="Sign in"></p>
+    
+    <br>
+    
+    <p><a href="{{url_for('dd_details')}}">Continue without signing in</a></p>
+  </form>
+
+{% endblock %}

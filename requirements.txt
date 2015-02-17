@@ -1,0 +1,14 @@
+backports.ssl-match-hostname==3.4.0.2
+certifi==14.5.14
+Flask==0.10.1
+gocardless==0.4.0
+greenlet==0.4.5
+itsdangerous==0.24
+Jinja2==2.7.3
+MarkupSafe==0.23
+motor==0.4
+pymongo==2.8
+requests==2.5.1
+stripe==1.20.2
+tornado==4.0.2
+Werkzeug==0.10

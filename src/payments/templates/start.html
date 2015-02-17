@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<article class="content__body">
+  <header>
+	<h1 class="heading-large">Welcome to the Circus of Values</h1>
+  </header>
+  
+  <p class="form-hint">These are test integrations to some Payment Providers.</p>
+
+  <form method="POST" autocomplete="off">
+  	<legend class="form-label-bold h2-heading">What are you paying for?</legend>
+    <fieldset class="form-group {% if 'what' in errors %} error-overview {% endif %}">
+	  <label for="what-frown-tax" class="block-label card-label ">
+	    <input type="radio" name="what" value="frown-tax" id="what-frown-tax"
+	      {% if session.what == 'frown-tax'%}checked{% endif %} required> Frown Tax
+	  </label>
+    
+	  <label for="what-volcano-insurance" class="block-label card-label ">
+	    <input type="radio" name="what" value="volcano-insurance" id="what-volcano-insurance"
+	      {% if session.what == 'volcano-insurance'%}checked{% endif %} required> Volcano Insurance
+	  </label>
+	  
+	  <label for="what-breathing-license" class="block-label card-label ">
+	    <input type="radio" name="what" value="breathing-license" id="what-breathing-license"
+	      {% if session.what == 'breathing-license' %}checked{% endif %} required> Breathing License
+	  </label>
+    </fieldset>
+
+    <br>
+  
+  	<fieldset class="{% if 'amount' in errors %} error-overview {% endif %}">
+	    <label for="amount">
+	    	<legend class="form-label-bold h2-heading">Amount to pay</legend>
+	        <span class="label__text">£</span>
+	        <input type="text" class="form-control input--small" name="amount" id="amount" value="{{session.amount}}"
+	         maxlength="10" pattern="[0-9]+(\.[0-9]{2})?" required>
+	    </label>
+	</fieldset>
+
+    <br>
+	
+	<fieldset class="{% if 'account' in errors %} error-overview {% endif %}">
+	    <label for="account">
+	    	<legend class="form-label-bold">Account Number</legend>
+	        <input type="text" class="form-control input-medium" name="account" id="account" value="{{session.account}}" required>
+	    </label>
+	</fieldset>
+	
+    <p><input type="submit" id="next" class="button" value="Next"></p>
+  </form>
+</article>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% if payment.success %}
+<tr>
+  <th>Payment method</th>
+  <td id="tax-reference" class="figure">PayPal</td>
+</tr>
+
+<tr>
+  <th>Account used</th>
+  <td id="tax-reference" class="figure">{{payment.info.payer.payer_info.email}}</td>
+</tr>
+{% endif %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+
+<article class="content__body">
+  <header>
+	<h1 class="heading-large">Confirm your payment</h1>
+  </header>
+
+  <table class="min summary">
+    <tbody>
+      <tr>
+        <th class="grid-1-2">Paying</th>
+        <td class="grid-1-2">{{session.what}}</td>
+      </tr>
+
+      <tr>
+        <th>Amount</th>
+        <td class="figure">£{{session.amount}}</td>
+      </tr>
+
+      <tr>
+        <th>Account number</th>
+        <td id="tax-reference" class="figure">{{session.account}}</td>
+      </tr>
+      
+      <tr>
+        <th>Card type</th>
+        <td id="tax-reference" class="figure">{{session['card-type']}}</td>
+      </tr>
+      
+      <tr>
+        <th>Card number</th>
+        <td id="tax-reference" class="figure">ends {{session['card-number'][-4:]}}</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <form method="POST">
+    <label for="email" class="form-label">
+      <legend class="form-label-bold">E-mail address</legend>
+      
+	  <p class="form-hint">We'll send you a confirmation that this payment has been made and when we receive your
+	    money, or if anything goes wrong.</p>
+	    
+	  <input type="text" class="form-control input-medium" name="email" id="email" value="" required>
+    </label>
+  
+    <p><input type="submit" id="confirm" class="button" value="Confirm"></p>
+  	
+  	<p class="important-notice" style="height: 3em; line-height: 2em;">Please only press Confirm once.</p>
+  </form>
+
+{% endblock %}
