@@ -2,6 +2,7 @@
 {% block status %}
 	<div class="transaction-banner--complete {% if not payment.provider_specific.success %}error{% endif %}">
 		<h1 class="transaction-banner__heading">Payment {% if payment.provider_specific.success %}succeeded{% else %}failed {% endif %}</h1>
+		{% if not payment.provider_specific.success %}<h2 class="transaction-banner__heading">{{payment.provider_specific.error}}</h2>{% endif %}
 		<h2 class="transaction-banner__heading">Reference: <br>{{payment._id}}</h2>
 	</div>
 {% endblock %}
