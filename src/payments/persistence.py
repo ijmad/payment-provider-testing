@@ -1,8 +1,11 @@
 import os, pymongo
 
-conn = pymongo.Connection(os.environ['MONGO_URI'])
-db = conn[os.environ['MONGO_DATABASE']]
+
+uriString = os.environ['MONGOSOUP_URL']
+client = pymongo.MongoClient(uriString)
+db = client.get_default_database()
 payments_db = db['payments']
+
 
 class LookupException(Exception):
     def __init__(self, message):

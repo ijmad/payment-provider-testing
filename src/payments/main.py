@@ -12,10 +12,11 @@ Flask.secret_key = os.environ['FLASK_SECRET']
 
 app = Flask(__name__)
 
-app.config['MONGO_DBNAME'] = os.environ['MONGO_DATABASE']
-mongo = PyMongo(app)
-with app.app_context():
-    app.session_interface = MongoDBSessionInterface(app, mongo.db, 'sessions')
+# app.config['MONGO_DBNAME'] = os.environ['MONGO_DATABASE']
+# mongo = PyMongo(app)
+# with app.app_context():
+#     app.session_interface = MongoDBSessionInterface(app, mongo.db, 'sessions')
+
 
 from payments.controller import *
 
