@@ -1,8 +1,6 @@
 import os, pymongo
 
-
-uriString = os.environ['MONGOSOUP_URL']
-client = pymongo.MongoClient(uriString)
+client = pymongo.MongoClient(os.environ['MONGO_URI'])
 db = client.get_default_database()
 payments_db = db['payments']
 
