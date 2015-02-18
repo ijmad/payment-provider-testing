@@ -1,7 +1,7 @@
 import os, pymongo
 
 client = pymongo.MongoClient(os.environ['MONGO_URI'])
-db = client.get_default_database()
+db = client[os.environ['MONGO_DATABASE']]
 payments_db = db['payments']
 
 
