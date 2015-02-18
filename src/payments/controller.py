@@ -4,6 +4,7 @@ from flask import session, render_template, redirect, url_for, abort
 from payments.main import app
 from payments.persistence import lookup_ref
 from payments.util import form
+from payments.util.session import session_required
 
 @app.route('/', methods=['GET'])
 def index():
@@ -18,6 +19,7 @@ def start():
     return render_template('start.html')
 
 @app.route('/start', methods=['POST'])
+@session_required
 def start_submit():
     errors = []
     errors += form.to_session('what')
@@ -30,10 +32,12 @@ def start_submit():
         return render_template('start.html', errors = errors)
 
 @app.route('/provider', methods=['GET'])
+@session_required
 def provider():
     return render_template('provider.html')
 
 @app.route('/provider', methods=['POST'])
+@session_required
 def provider_submit():
     errors = form.to_session('provider')
     
@@ -67,4 +71,10 @@ def status(ref):
 
 @app.errorhandler(Exception)
 def catch_all(e):
-    return render_template('error.html', error = e.__class__.__name__, detail = str(e), traceback = traceback.format_exc())
+    return render_template(
+      'error.html',
+      error = e.__class__.__name__, 
+      message = e.message, 
+      detail = str(e), 
+      traceback = traceback.format_exc()
+    )

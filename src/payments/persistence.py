@@ -4,7 +4,6 @@ client = pymongo.MongoClient(os.environ['MONGO_URI'])
 db = client[os.environ['MONGO_DATABASE']]
 payments_db = db['payments']
 
-
 class LookupException(Exception):
     def __init__(self, message):
         self.message = message

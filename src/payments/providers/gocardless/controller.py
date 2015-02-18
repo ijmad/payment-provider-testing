@@ -1,20 +1,24 @@
 from flask import Blueprint, session, render_template, redirect, url_for
 
-from payments.util import form
 from payments.providers.gocardless import model
 from payments.persistence import lookup_ref
+from payments.util import form
+from payments.util.session import session_required
 
 gocardless_bp = Blueprint('gocardless', __name__, template_folder='templates')
 
 @gocardless_bp.route('/', methods=["GET"])
+@session_required
 def gocardless():
     return redirect(url_for('.gocardless_signin'))
 
 @gocardless_bp.route('/signin', methods=["GET"])
+@session_required
 def gocardless_signin():
     return render_template('gocardless_signin.html')
 
 @gocardless_bp.route('/signin', methods=["POST"])
+@session_required
 def gocardless_signin_submit():
     # fudge - pre-known customer id
     session['customer_id'] = 'CU00002TDW4R84'
@@ -42,10 +46,12 @@ def gocardless_signin_submit():
     return redirect(url_for('.gocardless_details'))
 
 @gocardless_bp.route('/details', methods=["GET"])
+@session_required
 def gocardless_details():
     return render_template('gocardless_details.html')
 
 @gocardless_bp.route('/details', methods=["POST"])
+@session_required
 def gocardless_details_submit():
     errors = []
     errors += form.to_session('sort-code')
@@ -66,6 +72,7 @@ def gocardless_details_submit():
         return redirect(url_for('.gocardless_confirm'))
 
 @gocardless_bp.route('/confirm', methods=["GET"])
+@session_required
 def gocardless_confirm():
     (mandate, charge_date) = model.calc_payment_date(
       session['ref'],
@@ -78,6 +85,7 @@ def gocardless_confirm():
     return render_template('gocardless_confirm.html', mandate = mandate, charge_date = charge_date)
 
 @gocardless_bp.route('/confirm', methods=['POST'])
+@session_required
 def gocardless_confirm_submit():
     errors = []
     errors += form.to_session('email')

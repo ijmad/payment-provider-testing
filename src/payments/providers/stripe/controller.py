@@ -3,18 +3,22 @@ from flask import Blueprint, session, render_template, url_for, redirect
 from payments.providers.stripe import model
 from payments.persistence import lookup_ref
 from payments.util import form
+from payments.util.session import session_required
  
 stripe_bp = Blueprint('stripe', __name__, template_folder='templates')
 
 @stripe_bp.route('/', methods=["GET"])
+@session_required
 def stripe():
     return redirect(url_for('.stripe_details'))
 
 @stripe_bp.route('/details', methods=['GET'])
+@session_required
 def stripe_details():
     return render_template('stripe_details.html')
 
 @stripe_bp.route('/details', methods=['POST'])
+@session_required
 def stripe_details_submit():
     errors = []
     errors += form.to_session('card-type')
@@ -35,10 +39,12 @@ def stripe_details_submit():
         return redirect(url_for('.stripe_confirm'))
 
 @stripe_bp.route('/confirm', methods=['GET'])
+@session_required
 def stripe_confirm():
     return render_template('stripe_confirm.html')
 
 @stripe_bp.route('/confirm', methods=['POST'])
+@session_required
 def stripe_confirm_submit():
     errors = []
     errors += form.to_session('email')
